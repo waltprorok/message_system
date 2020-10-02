@@ -51,7 +51,7 @@ class MessagesController extends Controller
         $message->deleted = 0;
         $message->save();
 
-        return redirect()->to('/home')->with('status', 'Message sent successfully!');
+        return redirect()->route('inbox')->with('status', 'Message sent successfully!');
     }
 
     public function sent()
@@ -76,7 +76,7 @@ class MessagesController extends Controller
         $message->deleted = true;
         $message->save();
 
-        return redirect()->to('/inbox')->with('status','Message deleted successfully');
+        return redirect()->route('inbox')->with('status','Message deleted successfully');
     }
 
     public function deleted()
