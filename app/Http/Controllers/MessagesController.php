@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Message;
-use Auth;
 use App\User;
+use Auth;
+use Illuminate\Http\Request;
 
 class MessagesController extends Controller
 {
@@ -16,17 +16,22 @@ class MessagesController extends Controller
 
     public function index()
     {
-        $messages = Message::with('userFrom')->where('user_id_to', Auth::id())->notDeleted()->get();
+        $messages = Message::with('userFrom')
+            ->where('user_id_to', Auth::id())
+            ->notDeleted()
+            ->get();
+
         return view('home')->with('messages', $messages);
     }
 
-    public function create(int $id = 0, String $subject = '')
+    public function create(int $id = 0, string $subject = '')
     {
         if ($id === 0) {
-            $users = User::where('id', '!=', AUth::id())->get();
+            $users = User::where('id', '!=', Auth::id())->get();
         } else {
             $users = User::where('id', $id)->get();
         }
+
         $users = User::where('id', '!=', Auth::id())->get();
 
         if ($subject !== '') $subject = 'Re: ' . $subject;
@@ -56,7 +61,10 @@ class MessagesController extends Controller
 
     public function sent()
     {
-        $messages = Message::with('userTo')->where('user_id_from', Auth::id())->orderBy('created', 'desc')->get();
+        $messages = Message::with('userTo')
+            ->where('user_id_from', Auth::id())
+            ->orderBy('created', 'desc')
+            ->get();
 
         return view('sent')->with('messages', $messages);
     }
@@ -76,12 +84,16 @@ class MessagesController extends Controller
         $message->deleted = true;
         $message->save();
 
-        return redirect()->route('inbox')->with('status','Message deleted successfully');
+        return redirect()->route('inbox')->with('status', 'Message deleted successfully');
     }
 
     public function deleted()
     {
-        $messages = Message::with('userFrom')->where('user_id_to', Auth::id())->deleted()->get();
+        $messages = Message::with('userFrom')
+            ->where('user_id_to', Auth::id())
+            ->deleted()
+            ->get();
+
         return view('deleted')->with('messages', $messages);
     }
 
