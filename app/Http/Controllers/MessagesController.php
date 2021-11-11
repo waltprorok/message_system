@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Message;
 use App\User;
 use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class MessagesController extends Controller
 {
@@ -39,7 +41,10 @@ class MessagesController extends Controller
         return view('create')->with(['users' => $users, 'subject' => $subject]);
     }
 
-    public function send(Request $request)
+    /**
+     * @throws ValidationException
+     */
+    public function send(Request $request): RedirectResponse
     {
         $this->validate($request, [
             'to' => 'required',
@@ -78,7 +83,7 @@ class MessagesController extends Controller
         return view('read')->with('message', $message);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): RedirectResponse
     {
         $message = Message::find($id);
         $message->deleted = true;
@@ -97,7 +102,7 @@ class MessagesController extends Controller
         return view('deleted')->with('messages', $messages);
     }
 
-    public function return(int $id)
+    public function return(int $id): RedirectResponse
     {
         $message = Message::find($id);
         $message->deleted = false;

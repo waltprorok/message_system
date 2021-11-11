@@ -3,17 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Message extends Model
 {
-    public function userFrom()
+    public function userFrom(): BelongsTo
     {
-        return $this->belongsTo('App\User', 'user_id_from');
+        return $this->belongsTo(User::class, 'user_id_from');
     }
 
-    public function userTo()
+    public function userTo(): BelongsTo
     {
-        return $this->belongsTo('App\User', 'user_id_to');
+        return $this->belongsTo(User::class, 'user_id_to');
     }
 
     public function scopeNotDeleted($query)
